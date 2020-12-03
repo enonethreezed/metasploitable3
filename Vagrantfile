@@ -9,7 +9,8 @@ Vagrant.configure("2") do |config|
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
 
-    ub1404.vm.network "private_network", ip: '172.28.128.3'
+    # ub1404.vm.network "private_network", ip: '172.28.128.3'
+    ub1404.vm.network :private_network, ip: "192.168.38.110", gateway: "192.168.38.1", dns: "8.8.8.8"
 
     ub1404.vm.provider "virtualbox" do |v|
       v.name = "Metasploitable3-ub1404"
@@ -25,7 +26,8 @@ Vagrant.configure("2") do |config|
     win2k8.winrm.retry_limit = 60
     win2k8.winrm.retry_delay = 10
 
-    win2k8.vm.network "private_network", type: "dhcp"
+    # win2k8.vm.network "private_network", type: "dhcp"
+    win2k8.vm.network :private_network, ip: "192.168.38.111", gateway: "192.168.38.1", dns: "8.8.8.8"
 
     win2k8.vm.provider "libvirt" do |v|
       v.memory = 4096

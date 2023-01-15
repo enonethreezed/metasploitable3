@@ -9,7 +9,8 @@ Vagrant.configure("2") do |config|
     config.ssh.username = 'vagrant'
     config.ssh.password = 'vagrant'
 
-    ub1404.vm.network "private_network", ip: '172.28.128.3'
+    # ub1404.vm.network "private_network", ip: '172.28.128.3'
+    ub1404.vm.network :private_network, ip: "192.168.56.200", gateway: "192.168.56.1", dns: "8.8.8.8"
 
     ub1404.vm.provider "virtualbox" do |v|
       v.name = "Metasploitable3-ub1404"
@@ -25,7 +26,8 @@ Vagrant.configure("2") do |config|
     win2k8.winrm.retry_limit = 60
     win2k8.winrm.retry_delay = 10
 
-    win2k8.vm.network "private_network", type: "dhcp"
+    # win2k8.vm.network "private_network", type: "dhcp"
+    win2k8.vm.network :private_network, ip: "192.168.56.201", gateway: "192.168.56.1", dns: "8.8.8.8"
 
     win2k8.vm.provider "libvirt" do |v|
       v.memory = 4096
@@ -44,13 +46,13 @@ Vagrant.configure("2") do |config|
     end
 
     # Configure Firewall to open up vulnerable services
-    case ENV['MS3_DIFFICULTY']
-      when 'easy'
+    # case ENV['MS3_DIFFICULTY']
+      # when 'easy'
         win2k8.vm.provision :shell, inline: "C:\\startup\\disable_firewall.bat"
-      else
-        win2k8.vm.provision :shell, inline: "C:\\startup\\enable_firewall.bat"
-        win2k8.vm.provision :shell, inline: "C:\\startup\\configure_firewall.bat"
-    end
+      #else
+      #  win2k8.vm.provision :shell, inline: "C:\\startup\\enable_firewall.bat"
+      #  win2k8.vm.provision :shell, inline: "C:\\startup\\configure_firewall.bat"
+    #end
 
     # Insecure share from the Linux machine
     win2k8.vm.provision :shell, inline: "C:\\startup\\install_share_autorun.bat"
